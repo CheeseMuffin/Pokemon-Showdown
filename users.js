@@ -24,6 +24,7 @@
  */
 
 'use strict';
+/** @typedef {ChatRoom | GameRoom | GlobalRoom} Room */
 
 const PLAYER_SYMBOL = '\u2606';
 const HOST_SYMBOL = '\u2605';
@@ -411,7 +412,7 @@ class Connection {
 	}
 
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {Room} room
 	 */
 	joinRoom(room) {
 		if (this.inRooms.has(room.id)) return;
@@ -419,7 +420,7 @@ class Connection {
 		Sockets.channelAdd(this.worker, room.id, this.socketid);
 	}
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {Room} room
 	 */
 	leaveRoom(room) {
 		if (this.inRooms.has(room.id)) {
@@ -570,7 +571,7 @@ class User {
 	}
 	/**
 	 * @param {string} minAuth
-	 * @param {Room?} room
+	 * @param {BasicChatRoom?} room
 	 */
 	authAtLeast(minAuth, room = null) {
 		if (!minAuth || minAuth === ' ') return true;
@@ -587,7 +588,7 @@ class User {
 	/**
 	 * @param {string} permission
 	 * @param {string | User?} target user or group symbol
-	 * @param {Room?} room
+	 * @param {BasicChatRoom?} room
 	 * @return {boolean}
 	 */
 	can(permission, target = null, room = null) {
@@ -1255,7 +1256,7 @@ class User {
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid);
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
+	 * @param {string | Room} roomid
 	 * @param {Connection} connection
 	 */
 	tryJoinRoom(roomid, connection) {
@@ -1265,6 +1266,7 @@ class User {
 		if (!room && roomid.startsWith('view-')) {
 			// it's a page!
 			let parts = roomid.split('-');
+			/** @type {AnyObject | undefined} */
 			let handler = Chat.pages;
 			parts.shift();
 			while (handler) {
@@ -1277,6 +1279,7 @@ class User {
 					}
 					return res;
 				}
+				// @ts-ignore
 				handler = handler[parts.shift() || 'default'];
 			}
 		}
@@ -1319,7 +1322,7 @@ class User {
 		return true;
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {string | Room} room
 	 * @param {Connection?} connection
 	 */
 	joinRoom(room, connection = null) {
@@ -1354,7 +1357,7 @@ class User {
 		return true;
 	}
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom | string} room
+	 * @param {Room | string} room
 	 * @param {?Connection} connection
 	 * @param {boolean} force
 	 */

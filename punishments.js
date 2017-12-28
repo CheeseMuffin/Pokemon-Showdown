@@ -13,6 +13,8 @@
  * @license MIT license
  */
 
+/** @typedef {ChatRoom | GameRoom | GlobalRoom} Room */
+
 let Punishments = module.exports;
 
 const FS = require('./lib/fs');

@@ -29,9 +29,10 @@ const FS = require('./lib/fs');
  * `logs/chat/<ROOMID>/<YEAR>-<MONTH>/<YEAR>-<MONTH>-<DAY>.txt`
  * It contains (nearly) everything.
  */
+
 class Roomlog {
 	/**
-	 * @param {Room} room
+	 * @param {BasicChatRoom} room
 	 */
 	constructor(room, options = {}) {
 		this.id = room.id;
@@ -260,7 +261,7 @@ const sharedModlogs = new Map();
 const roomlogs = new Map();
 
 /**
- * @param {Room} room
+ * @param {BasicChatRoom} room
  */
 function createRoomlog(room, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.id);
